@@ -1,41 +1,46 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\DroneController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\UserController;
 
-// ── Rutas públicas ─────────────────────────────────────────────────────────────
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login',    [AuthController::class, 'login']);
+// Rutas públicas
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 
-// ── Rutas protegidas (requieren token) ─────────────────────────────────────────
+// Catálogo de modelos (público)
+Route::get('/drone-models', [App\Http\Controllers\DroneModelController::class, 'index']);
+Route::get('/drone-models/marcas', [App\Http\Controllers\DroneModelController::class, 'marcas']);
+Route::get('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'show']);
+
+// Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Auth
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/me',      [AuthController::class, 'me']);
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
+    Route::get('/me', [App\Http\Controllers\AuthController::class, 'me']);
 
     // Citas
-    Route::get('/appointments',                        [AppointmentController::class, 'index']);
-    Route::post('/appointments',                       [AppointmentController::class, 'store']);
-    Route::patch('/appointments/{appointment}/status', [AppointmentController::class, 'updateStatus']);
+    Route::get('/appointments', [App\Http\Controllers\AppointmentController::class, 'index']);
+    Route::post('/appointments', [App\Http\Controllers\AppointmentController::class, 'store']);
+    Route::patch('/appointments/{id}/status', [App\Http\Controllers\AppointmentController::class, 'updateStatus']);
 
     // Drones
-    Route::get('/drones',                          [DroneController::class, 'index']);
-    Route::post('/drones',                         [DroneController::class, 'store']);
-    Route::patch('/drones/{drone}/status',         [DroneController::class, 'updateStatus']);
+    Route::get('/drones', [App\Http\Controllers\DroneController::class, 'index']);
+    Route::post('/drones', [App\Http\Controllers\DroneController::class, 'store']);
+    Route::patch('/drones/{id}/status', [App\Http\Controllers\DroneController::class, 'updateStatus']);
+    Route::delete('/drones/{id}', [App\Http\Controllers\DroneController::class, 'destroy']);
 
-    // Reportes / Historia clínica
-    Route::get('/reports',                         [ReportController::class, 'index']);
-    Route::post('/reports',                        [ReportController::class, 'store']);
-    Route::get('/drones/{drone}/reports',          [ReportController::class, 'droneHistory']);
+    // Reportes
+    Route::get('/reports', [App\Http\Controllers\ReportController::class, 'index']);
+    Route::post('/reports', [App\Http\Controllers\ReportController::class, 'store']);
+    Route::get('/drones/{id}/reports', [App\Http\Controllers\ReportController::class, 'byDrone']);
 
-    // Usuarios (solo admin y superadmin)
-    Route::get('/users',                           [UserController::class, 'index']);
-    Route::patch('/users/{user}/role',             [UserController::class, 'changeRole']);
-    Route::patch('/users/{user}/toggle-status',    [UserController::class, 'toggleStatus']);
-    Route::delete('/users/{user}',                 [UserController::class, 'destroy']);
+    // Usuarios (admin/superadmin)
+    Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);
+    Route::patch('/users/{id}', [App\Http\Controllers\UserController::class, 'update']);
+    Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy']);
+
+    // Gestión catálogo modelos (superadmin)
+    Route::post('/drone-models', [App\Http\Controllers\DroneModelController::class, 'store']);
+    Route::put('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'update']);
+    Route::delete('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'destroy']);
 });
