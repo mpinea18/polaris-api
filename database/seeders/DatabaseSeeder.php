@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         if (User::count() === 0) {
             $client = User::create([
                 'name'     => 'Juan García',
-                'email'    => 'cliente@polaris.com',
+                'email'    => 'cliente@mmyj.com',
                 'password' => Hash::make('123'),
                 'role'     => 'client',
                 'status'   => 'active',
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
             User::create([
                 'name'     => 'Carlos Méndez',
-                'email'    => 'tecnico@polaris.com',
+                'email'    => 'tecnico@mmyj.com',
                 'password' => Hash::make('123'),
                 'role'     => 'tech',
                 'status'   => 'active',
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
             User::create([
                 'name'     => 'María López',
-                'email'    => 'admin@polaris.com',
+                'email'    => 'admin@mmyj.com',
                 'password' => Hash::make('123'),
                 'role'     => 'admin',
                 'status'   => 'active',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
 
             User::create([
                 'name'     => 'Director General',
-                'email'    => 'super@polaris.com',
+                'email'    => 'super@mmyj.com',
                 'password' => Hash::make('123'),
                 'role'     => 'superadmin',
                 'status'   => 'active',

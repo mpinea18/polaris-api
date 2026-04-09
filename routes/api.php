@@ -12,6 +12,9 @@ Route::get('/drone-models', [App\Http\Controllers\DroneModelController::class, '
 Route::get('/drone-models/marcas', [App\Http\Controllers\DroneModelController::class, 'marcas']);
 Route::get('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'show']);
 
+// Settings (público)
+Route::get('/settings/{key}', [App\Http\Controllers\SettingsController::class, 'get']);
+
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -43,4 +46,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/drone-models', [App\Http\Controllers\DroneModelController::class, 'store']);
     Route::put('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'update']);
     Route::delete('/drone-models/{id}', [App\Http\Controllers\DroneModelController::class, 'destroy']);
+
+    // Garantías
+    Route::get('/warranties', [App\Http\Controllers\WarrantyController::class, 'index']);
+    Route::post('/warranties', [App\Http\Controllers\WarrantyController::class, 'store']);
+    Route::post('/warranties/{id}/approve', [App\Http\Controllers\WarrantyController::class, 'approve']);
+    Route::post('/warranties/{id}/deny', [App\Http\Controllers\WarrantyController::class, 'deny']);
+    Route::patch('/warranties/{id}/status', [App\Http\Controllers\WarrantyController::class, 'updateStatus']);
+
+    // Settings (solo superadmin)
+    Route::post('/settings/upload-video', [App\Http\Controllers\SettingsController::class, 'uploadVideo']);
+    Route::post('/settings/{key}', [App\Http\Controllers\SettingsController::class, 'set']);
 });
