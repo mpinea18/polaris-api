@@ -15,6 +15,9 @@ Route::get('/drone-models/{id}', [App\Http\Controllers\DroneModelController::cla
 // Settings (público)
 Route::get('/settings/{key}', [App\Http\Controllers\SettingsController::class, 'get']);
 
+// Técnicos (público — para que el cliente pueda agendar citas)
+Route::get('/tecnicos', [App\Http\Controllers\UserController::class, 'tecnicos']);
+
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
