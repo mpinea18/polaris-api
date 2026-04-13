@@ -1,7 +1,7 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DroneHistoryController;
 
 // Rutas públicas
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
@@ -17,7 +17,6 @@ Route::get('/settings/{key}', [App\Http\Controllers\SettingsController::class, '
 
 // Rutas protegidas
 Route::middleware('auth:sanctum')->group(function () {
-
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/me', [App\Http\Controllers\AuthController::class, 'me']);
 
@@ -53,6 +52,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/warranties/{id}/approve', [App\Http\Controllers\WarrantyController::class, 'approve']);
     Route::post('/warranties/{id}/deny', [App\Http\Controllers\WarrantyController::class, 'deny']);
     Route::patch('/warranties/{id}/status', [App\Http\Controllers\WarrantyController::class, 'updateStatus']);
+
+    // Historia clínica global UAS
+    Route::post('/drone-history', [DroneHistoryController::class, 'store']);
+    Route::get('/drone-history/{droneId}', [DroneHistoryController::class, 'getByDrone']);
 
     // Settings (solo superadmin)
     Route::post('/settings/upload-video', [App\Http\Controllers\SettingsController::class, 'uploadVideo']);
